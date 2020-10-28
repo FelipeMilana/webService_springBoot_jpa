@@ -1,13 +1,20 @@
 package com.javaudemy.webService_springBoot_jpa.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Table(name = "Tb_user")
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -19,6 +26,11 @@ public class User implements Serializable{
 	private String email;
 	private String phone;
 	private String password;
+	
+	//associations
+	@JsonIgnore
+	@OneToMany(mappedBy = "client")
+	private List<Order> orders = new ArrayList<Order>();
 	
 	//we need standard constructor because we've using frameworks
 	public User() {
@@ -71,6 +83,10 @@ public class User implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public List<Order> getOrders() {
+		return orders;
 	}
 
 	public static long getSerialversionuid() {
