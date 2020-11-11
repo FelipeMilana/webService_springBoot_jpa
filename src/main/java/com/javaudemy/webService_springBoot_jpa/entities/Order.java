@@ -103,6 +103,14 @@ public class Order implements Serializable{
 		this.payment = payment;
 	}
 	
+	public Double getTotal() {
+		double total = 0.0;
+		for(OrderItem oi: items) {
+			total += oi.getSubTotal();
+		}
+		return total;
+	}
+	
 	//HashCode and Equals, using only id
 	@Override
 	public int hashCode() {
