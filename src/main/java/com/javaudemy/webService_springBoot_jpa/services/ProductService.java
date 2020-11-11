@@ -13,14 +13,14 @@ import com.javaudemy.webService_springBoot_jpa.repositories.ProductRepository;
 public class ProductService {
 
 	@Autowired
-	private ProductRepository userRepository;
+	private ProductRepository productRepository;
 	
 	public List<Product> findAll() {
-		return userRepository.findAll();
+		return productRepository.findAll();
 	}
 	
 	public Product findById(Long id) {
-		Optional<Product> obj = userRepository.findById(id);
+		Optional<Product> obj = productRepository.findById(id);
 		return obj.get();
 	}
 }

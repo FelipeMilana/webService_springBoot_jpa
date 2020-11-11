@@ -11,7 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_product")
@@ -23,7 +26,7 @@ public class Product implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	private String dedscription;
+	private String description;
 	private Double price;
 	private String imgUrl;
 	
@@ -34,14 +37,17 @@ public class Product implements Serializable{
 	inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> categories = new HashSet<Category>();
 	
+	@OneToMany(mappedBy = "id.product")
+	private Set<OrderItem> items = new HashSet<OrderItem>();
+	
 	//constructors
 	public Product() {
 	}
 
-	public Product(Long id, String name, String dedscription, Double price, String imgUrl) {
+	public Product(Long id, String name, String description, Double price, String imgUrl) {
 		this.id = id;
 		this.name = name;
-		this.dedscription = dedscription;
+		this.description = description;
 		this.price = price;
 		this.imgUrl = imgUrl;
 	}
@@ -63,12 +69,12 @@ public class Product implements Serializable{
 		this.name = name;
 	}
 
-	public String getDedscription() {
-		return dedscription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDedscription(String dedscription) {
-		this.dedscription = dedscription;
+	public void setDescription(String dedscription) {
+		this.description = dedscription;
 	}
 
 	public Double getPrice() {
@@ -89,6 +95,16 @@ public class Product implements Serializable{
 
 	public Set<Category> getCategories() {
 		return categories;
+	}
+	
+	@JsonIgnore
+	public Set<Order> getOrders() {
+		Set<Order> set = new HashSet<Order>();
+		
+		for(OrderItem oi: items) {
+			set.add(oi.getOrder());
+		}
+		return set;
 	}
 
 	//HashCode and Equals, using only id

@@ -13,14 +13,14 @@ import com.javaudemy.webService_springBoot_jpa.repositories.CategoryRepository;
 public class CategoryService {
 
 	@Autowired
-	private CategoryRepository userRepository;
+	private CategoryRepository categoryRepository;
 	
 	public List<Category> findAll() {
-		return userRepository.findAll();
+		return categoryRepository.findAll();
 	}
 	
 	public Category findById(Long id) {
-		Optional<Category> obj = userRepository.findById(id);
+		Optional<Category> obj = categoryRepository.findById(id);
 		return obj.get();
 	}
 }

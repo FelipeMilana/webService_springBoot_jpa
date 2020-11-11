@@ -17,17 +17,17 @@ import com.javaudemy.webService_springBoot_jpa.services.ProductService;
 public class ProductResource {
  
 	@Autowired
-	private ProductService userService;
+	private ProductService productService;
 	
 	@GetMapping
 	public ResponseEntity<List<Product>> findAll() {
-		List<Product> list = userService.findAll();	
+		List<Product> list = productService.findAll();	
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Product> findById(@PathVariable Long id) {
-		Product obj = userService.findById(id);
+		Product obj = productService.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 }
