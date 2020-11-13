@@ -3,11 +3,17 @@ package com.javaudemy.webService_springBoot_jpa.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.javaudemy.webService_springBoot_jpa.entities.User;
 import com.javaudemy.webService_springBoot_jpa.repositories.UserRepository;
+import com.javaudemy.webService_springBoot_jpa.services.exceptions.DatabaseException;
+import com.javaudemy.webService_springBoot_jpa.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class UserService {
@@ -21,7 +27,7 @@ public class UserService {
 	
 	public User findById(Long id) {
 		Optional<User> obj = userRepository.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
 	/*Save method, already return the object that will be 
@@ -32,7 +38,16 @@ public class UserService {
 	}
 	
 	public void delete(Long id) {
-		userRepository.deleteById(id);
+		try {
+			userRepository.deleteById(id);
+		}
+		catch(EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id);
+		}
+		catch(DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+		
 	}
 	
 	/*We use an id and an object as an argument, because 
@@ -41,9 +56,14 @@ public class UserService {
 	 * prepare not recover the user from database.
 	 */
 	public User update(Long id, User obj) {
-		User entity = userRepository.getOne(id);
-		updateData(entity, obj);
-		return userRepository.save(entity);
+		try {
+			User entity = userRepository.getOne(id);
+			updateData(entity, obj);
+			return userRepository.save(entity);
+		}
+		catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 	
 	private void updateData(User entity, User obj) {
