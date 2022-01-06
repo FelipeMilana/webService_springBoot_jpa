@@ -43,8 +43,8 @@ git clone: https://github.com/FelipeMilana/webService_springBoot_jpa.git
 # Alterar application.properties
 Usar TestProfile ou DevProfile (se tiver uma conexão própria com o PostgreSQL)
 
-# Executar o seguinte comando
-.mvnw/ spring-boot:run
+# Executar o seguinte comando na pasta principal do projeto
+./mvnw spring-boot:run
 
 #Usar o Postman
 https://localhost:8080
